@@ -1,18 +1,22 @@
-import { QuizAttempt } from '../models/QuizAttempt.js';
-import {  Answer } from '../models/Answer.js';
+const { QuizAttempt } = require("../models/QuizAttempt.js");
+const { Answer } = require("../models/Answer.js");
 
-import { Question } from '../models/Question.js';
-import {  Choice } from '../models/Choice.js';
+const { Question } = require("../models/Question.js");
+const { Choice } = require("../models/Choice.js");
 
-
-export const takeQuiz = async (req, res, next) => {
+exports.takeQuiz = async (req, res, next) => {
   try {
-    const attempt = await QuizAttempt.create({ student: req.user.id, quiz: req.params.quizId });
+    const attempt = await QuizAttempt.create({
+      student: req.user.id,
+      quiz: req.params.quizId,
+    });
     res.status(201).json({ success: true, data: attempt });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const submitAnswers = async (req, res, next) => {
+exports.submitAnswers = async (req, res, next) => {
   try {
     const { attemptId } = req.params;
     const { answers } = req.body; // Array of { questionId, selectedChoiceId, textAnswer }
@@ -25,9 +29,15 @@ export const submitAnswers = async (req, res, next) => {
       let isCorrect = false;
       let pointsEarned = 0;
 
-      if (question.type === 'MCQ' || question.type === 'TrueFalse') {
-        const correctChoice = await Choice.findOne({ question: question._id, isCorrect: true });
-        if (correctChoice && correctChoice._id.toString() === item.selectedChoiceId) {
+      if (question.type === "MCQ" || question.type === "TrueFalse") {
+        const correctChoice = await Choice.findOne({
+          question: question._id,
+          isCorrect: true,
+        });
+        if (
+          correctChoice &&
+          correctChoice._id.toString() === item.selectedChoiceId
+        ) {
           isCorrect = true;
           pointsEarned = question.points;
         }
@@ -41,15 +51,19 @@ export const submitAnswers = async (req, res, next) => {
         selectedChoice: item.selectedChoiceId,
         textAnswer: item.textAnswer,
         isCorrect,
-        pointsEarned
+        pointsEarned,
       });
     }
 
     attempt.score = totalScore;
     attempt.submittedAt = new Date();
-    attempt.duration = Math.floor((attempt.submittedAt - attempt.startedAt) / 1000);
+    attempt.duration = Math.floor(
+      (attempt.submittedAt - attempt.startedAt) / 1000,
+    );
     await attempt.save();
 
     res.status(200).json({ success: true, score: attempt.score });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 };

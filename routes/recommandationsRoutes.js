@@ -1,14 +1,13 @@
-import express from 'express';
-import { 
-
-  getRecommendations 
-} from '../controllers/recommendationController.js';
-import { protect, authorize } from '../middlewares/authMiddleware.js';
+const express = require("express");
+const {
+  getRecommendations,
+} = require("../controllers/recommendationController.js");
+const { protect, authorize } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
 router.use(protect);
 
-router.get('/recommendations', authorize('student'), getRecommendations);
+router.get("/recommendations", authorize("student"), getRecommendations);
 
-export default router;
+module.exports = router;
