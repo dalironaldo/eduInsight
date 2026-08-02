@@ -2,7 +2,7 @@
 const { Module } = require("../models/Module.js");
 exports.addModule = async (req, res, next) => {
   try {
-    const module = await Module.create({
+    const Module = await Module.create({
       ...req.body,
       course: req.params.coursId,
     });
