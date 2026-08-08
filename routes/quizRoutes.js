@@ -10,8 +10,8 @@ const { protect, authorize } = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
-router.use(protect, authorize("teacher", "admin"));
-router.post("/course/:courseId", createQuiz);
+router.use(protect, authorize("Teacher", "Admin"));
+router.post("/course/:courseId/:id", createQuiz);
 router.patch("/:id/publish", publishQuiz);
 router.post("/:quizId/questions", addQuestion);
 router.delete("/:id", deleteQuiz);

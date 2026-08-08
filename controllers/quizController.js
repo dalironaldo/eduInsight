@@ -1,6 +1,6 @@
-const { Quiz } = require("../models/Quiz.js");
-const { Question } = require("../models/Question.js");
-const { Choice } = require("../models/Choice.js");
+const Quiz = require("../models/Quiz.js");
+const Question = require("../models/Question.js");
+const Choice = require("../models/Choice.js");
 
 exports.createQuiz = async (req, res, next) => {
   try {
